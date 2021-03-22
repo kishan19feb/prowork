@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useAlert } from "react-alert";
 import {Container, FormWrap, InputWrap, NameWrap} from '../Styled';
 
 function AddUsers(){
@@ -10,6 +11,7 @@ function AddUsers(){
     const [address,setAddress] = useState('');
     const [description,setDescription] = useState('');
     const history = useHistory();
+    const alertBox = useAlert();
 
     function saveUser(){
         let newData = {firstName,lastName, gender, age, address, description};
@@ -21,14 +23,16 @@ function AddUsers(){
         }
         if(firstName.trim() !== "" && lastName.trim() !== "" && gender.trim() !== "" && age.trim() !== "" && address.trim() !== "" && description.trim() !== ""){
             if(age.trim() < 5 || age.trim() > 100){
-                alert("Age should be between 5 to 100.");
+                alertBox.show("Age should be between 5 and 100.");
             } else {
                 userData.push(newData);
-                alert("User details saved successfully.");
-                history.push('/list');                
+                alertBox.success("User details saved successfully.");
+                setTimeout(function(){
+                    history.push('/list')
+                },5000);                
             }
         } else {
-            alert("All fields are mandatory.");
+            alertBox.error("All fields are mandatory.");
         }
         localStorage.setItem('userData',JSON.stringify(userData));
     }
